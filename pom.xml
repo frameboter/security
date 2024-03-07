@@ -23,5 +23,11 @@
         </plugins>
         <finalName>security</finalName>
     </build>
-
+ <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub frameboter Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/frameboter/security</url>
+        </repository>
+    </distributionManagement>
 </project>
