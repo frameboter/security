@@ -8,7 +8,7 @@
         <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.roboter5123</groupId>
+    <groupId>com.frameboter</groupId>
     <artifactId>security</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <name>security</name>
