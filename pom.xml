@@ -30,6 +30,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
+             <dependency>
+    <groupId>com.c4-soft.springaddons</groupId>
+    <artifactId>spring-addons-starter-oidc</artifactId>
+    <version>7.5.3</version>
+</dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-policy-enforcer</artifactId>
