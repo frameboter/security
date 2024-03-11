@@ -11,6 +11,6 @@ public class AbstractResource {
   }
 
   private final Object getRoles(Jwt jwt){
-    return jwt.getClaimAsStringList("role_list");
+    return jwt.getClaimAsStringList("roles");
   }
 }
