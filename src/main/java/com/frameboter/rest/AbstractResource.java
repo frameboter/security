@@ -5,7 +5,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 public class AbstractResource {
 
-  # @AuthenticationPrincipal 
+  // @AuthenticationPrincipal 
   private final String getUserName(Jwt jwt){
     return jwt.getName();
   }
