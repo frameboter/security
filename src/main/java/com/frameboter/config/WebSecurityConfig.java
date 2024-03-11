@@ -6,11 +6,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
+
 
 @RequiredArgsConstructor
 @AutoConfiguration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(jsr250Enabled = true)
+@EnableMethodSecurity(jsr250Enabled = true)
 public class WebSecurityConfig {
 
   private final JwtAuthConverter jwtAuthConverter;
