@@ -14,7 +14,7 @@ public class WebSecurityConfig {
 
   private final JwtAuthConverter jwtAuthConverter;
 
-  WebSecurityConfig(JwtAuthConverter jwtAuthConverter){
+  WebSecurityConfig WebSecurityConfig(JwtAuthConverter jwtAuthConverter){
     this.jwtAuthConverter = jwtAuthConverter;
   }
 
