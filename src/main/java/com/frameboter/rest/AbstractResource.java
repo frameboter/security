@@ -7,10 +7,10 @@ public class AbstractResource {
 
   // @AuthenticationPrincipal 
   private final Object getUserName(Jwt jwt){
-    return jwt.getClaims().get("upn");
+    return jwt.getClaimAsString("upn");
   }
 
   private final Object getRoles(Jwt jwt){
-    return jwt.getClaims().get("role_list");
+    return jwt.getClaimAsStringList("role_list");
   }
 }
