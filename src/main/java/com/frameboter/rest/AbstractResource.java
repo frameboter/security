@@ -1,7 +1,7 @@
-package org.keycloak.quickstart;
+package com.frameboter.rest;
 
-import org.springframework.security.oauth2.jwt.JwtClaimNames;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 public class AbstractResource {
 
