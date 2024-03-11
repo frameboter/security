@@ -5,11 +5,12 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 public class AbstractResource {
 
-  private final String getUserName(@AuthenticationPrincipal Jwt jwt){
+  # @AuthenticationPrincipal 
+  private final String getUserName(Jwt jwt){
     return jwt.getName();
   }
 
-  private final String getRoles(@AuthenticationPrincipal Jwt jwt){
+  private final String getRoles(Jwt jwt){
     return jwt.getAuthorities();
   }
 }
