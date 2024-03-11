@@ -6,11 +6,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 public class AbstractResource {
 
   // @AuthenticationPrincipal 
-  private final Object getUserName(Jwt jwt){
+  protected final Object getUserName(Jwt jwt){
     return jwt.getClaimAsString("upn");
   }
 
-  private final Object getRoles(Jwt jwt){
+  protected final Object getRoles(Jwt jwt){
     return jwt.getClaimAsStringList("roles");
   }
 }
