@@ -1,21 +1,15 @@
 package org.keycloak.quickstart;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.oauth2.jwt.JwtClaimNames;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 public class AbstractResource {
 
-  private final String getUserName(@AuthenticationPrincipal Jwt jwt){
-    return jwt.getClaimAsString("username");
+  private final String getUserName(JwtAuthenticationToken auth){
+    return auth.getName();
   }
 
-  private final String getRoles(@AuthenticationPrincipal Jwt jwt){
-    return jwt.getClaimAsString("roles");
-  }
-  
-  private final String getEmail(@AuthenticationPrincipal Jwt jwt){
-    return jwt.getClaimAsString("email");
+  private final String getRoles(JwtAuthenticationToken auth){
+    return auth.getAuthorities();
   }
 }
