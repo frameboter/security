@@ -14,6 +14,10 @@ public class WebSecurityConfig {
 
   private final JwtAuthConverter jwtAuthConverter;
 
+  WebSecurityConfig(JwtAuthConverter jwtAuthConverter){
+    this.jwtAuthConverter = jwtAuthConverter;
+  }
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
       http.cors().and().csrf().disable();
