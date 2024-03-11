@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 @RequiredArgsConstructor
 @AutoConfiguration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class WebSecurityConfig {
 
   private final JwtAuthConverter jwtAuthConverter;
