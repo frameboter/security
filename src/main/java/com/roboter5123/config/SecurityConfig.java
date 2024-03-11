@@ -1,85 +1,54 @@
-@Configuration
+import java.io.IOException;
+
+import org.keycloak.adapters.authorization.integration.jakarta.ServletPolicyEnforcerFilter;
+import org.keycloak.adapters.authorization.spi.ConfigurationResolver;
+import org.keycloak.adapters.authorization.spi.HttpRequest;
+import org.keycloak.representations.adapters.config.PolicyEnforcerConfig;
+import org.keycloak.util.JsonSerialization;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
+import org.springframework.security.web.SecurityFilterChain;
+
+@AutoConfiguration
 @EnableWebSecurity
-class SecurityConfig {
+public class OAuth2ResourceServerSecurityConfiguration {
 
-    private static final String GROUPS = "groups";
-    private static final String REALM_ACCESS_CLAIM = "realm_access";
-    private static final String ROLES_CLAIM = "roles";
+	@Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+	String jwkSetUri;
 
-    private final KeycloakLogoutHandler keycloakLogoutHandler;
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated())
+				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+				.addFilterAfter(createPolicyEnforcerFilter(), BearerTokenAuthenticationFilter.class);
+		return http.build();
+	}
 
-    SecurityConfig(KeycloakLogoutHandler keycloakLogoutHandler) {
-        this.keycloakLogoutHandler = keycloakLogoutHandler;
-    }
+	private ServletPolicyEnforcerFilter createPolicyEnforcerFilter() {
+		PolicyEnforcerConfig config;
+		try {
+			config = JsonSerialization.readValue(getClass().getResourceAsStream("/policy-enforcer.json"), PolicyEnforcerConfig.class);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return new ServletPolicyEnforcerFilter(new ConfigurationResolver() {
+			@Override
+			public PolicyEnforcerConfig resolve(HttpRequest request) {
+				return config;
+			}
+		});
+	}
 
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
+	@Bean
+	JwtDecoder jwtDecoder() {
+		return NimbusJwtDecoder.withJwkSetUri(this.jwkSetUri).build();
+	}
 
-    @Bean
-    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new RegisterSessionAuthenticationStrategy(sessionRegistry());
-    }
-
-    @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
-    }
-    
-    @Bean
-    public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-            .requestMatchers(new AntPathRequestMatcher("/"))
-            .permitAll()
-            .anyRequest()
-            .authenticated());
-        http.oauth2ResourceServer((oauth2) -> oauth2
-            .jwt(Customizer.withDefaults()));
-        http.oauth2Login(Customizer.withDefaults())
-            .logout(logout -> logout.addLogoutHandler(keycloakLogoutHandler).logoutSuccessUrl("/"));
-        return http.build();
-    }
-    
-    @Bean
-    public GrantedAuthoritiesMapper userAuthoritiesMapperForKeycloak() {
-        return authorities -> {
-            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
-            var authority = authorities.iterator().next();
-            boolean isOidc = authority instanceof OidcUserAuthority;
-
-            if (isOidc) {
-                var oidcUserAuthority = (OidcUserAuthority) authority;
-                var userInfo = oidcUserAuthority.getUserInfo();
-
-                // Tokens can be configured to return roles under
-                // Groups or REALM ACCESS hence have to check both
-                if (userInfo.hasClaim(REALM_ACCESS_CLAIM)) {
-                    var realmAccess = userInfo.getClaimAsMap(REALM_ACCESS_CLAIM);
-                    var roles = (Collection<String>) realmAccess.get(ROLES_CLAIM);
-                    mappedAuthorities.addAll(generateAuthoritiesFromClaim(roles));
-                } else if (userInfo.hasClaim(GROUPS)) {
-                    Collection<String> roles = (Collection<String>) userInfo.getClaim(
-                        GROUPS);
-                    mappedAuthorities.addAll(generateAuthoritiesFromClaim(roles));
-                }
-            } else {
-                var oauth2UserAuthority = (OAuth2UserAuthority) authority;
-                Map<String, Object> userAttributes = oauth2UserAuthority.getAttributes();
-
-                if (userAttributes.containsKey(REALM_ACCESS_CLAIM)) {
-                    Map<String, Object> realmAccess = (Map<String, Object>) userAttributes.get(
-                        REALM_ACCESS_CLAIM);
-                    Collection<String> roles = (Collection<String>) realmAccess.get(ROLES_CLAIM);
-                    mappedAuthorities.addAll(generateAuthoritiesFromClaim(roles));
-                }
-            }
-            return mappedAuthorities;
-        };
-    }
-
-    Collection<GrantedAuthority> generateAuthoritiesFromClaim(Collection<String> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(
-            Collectors.toList());
-    }
 }
