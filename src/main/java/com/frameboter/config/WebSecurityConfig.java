@@ -1,4 +1,5 @@
 package com.frameboter.config;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,13 +10,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
-@RequiredArgsConstructor
 @AutoConfiguration
 @EnableWebSecurity
 @EnableMethodSecurity(jsr250Enabled = true)
 public class WebSecurityConfig {
 
-  private final JwtAuthConverter jwtAuthConverter;
+  private final JwtAuthConverter jwtAuthConverter = new JwtAuthConverter();
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
