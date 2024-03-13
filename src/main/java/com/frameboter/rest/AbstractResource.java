@@ -9,7 +9,6 @@ public class AbstractResource {
     return jwt.getSubject();
   }
 
-    // @AuthenticationPrincipal 
   protected final String getUserName(Jwt jwt){
     return jwt.getClaimAsString("preferred_username");
   }
