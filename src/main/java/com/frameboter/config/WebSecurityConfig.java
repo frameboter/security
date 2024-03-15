@@ -22,15 +22,18 @@ public class WebSecurityConfig {
     @Value("${springdoc.api-docs.path:/api-docs}")
     private String openApiPath;
 
+    @Value("${server.servlet.context-path:}")
+    private String pathPrefix;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.cors().and().csrf().disable();
         http.authorizeHttpRequests()
-                .requestMatchers(swaggerPath).permitAll()
-                .requestMatchers(swaggerPath + "-ui/*").permitAll()
-                .requestMatchers(openApiPath + "/*").permitAll()
+                .requestMatchers(pathPrefix + "/" + swaggerPath).permitAll()
+                .requestMatchers(pathPrefix + "/" + swaggerPath + "-ui/*").permitAll()
+                .requestMatchers(pathPrefix + "/" + openApiPath + "/*").permitAll()
                 .anyRequest().authenticated();
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
