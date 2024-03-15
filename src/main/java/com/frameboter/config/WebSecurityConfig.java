@@ -32,8 +32,8 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable();
         http.authorizeHttpRequests()
                 .requestMatchers(swaggerPath).permitAll()
-                .requestMatchers(pathPrefix + "/" + swaggerPath + "-ui").permitAll()
-                .requestMatchers(pathPrefix + "/" + openApiPath + "/*").permitAll()
+                .requestMatchers(pathPrefix + "/" + swaggerPath + "-ui/**").permitAll()
+                .requestMatchers(pathPrefix + "/" + openApiPath + "/**").permitAll()
                 .anyRequest().authenticated();
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
