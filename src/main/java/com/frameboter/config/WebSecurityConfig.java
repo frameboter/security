@@ -32,7 +32,7 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable();
         http.authorizeHttpRequests()
                 .requestMatchers(swaggerPath).permitAll()
-                .requestMatchers( "swagger-ui/*").permitAll()
+                .requestMatchers( swaggerPath +"-ui/*").permitAll()
                 .anyRequest().authenticated();
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
