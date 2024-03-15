@@ -33,7 +33,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests()
                 .requestMatchers(swaggerPath).permitAll()
                 .requestMatchers(swaggerPath + "-ui/*").permitAll()
-                .requestMatchers("/" + openApiPath + "/*").permitAll()
+                .requestMatchers(pathPrefix + "/" + openApiPath + "/*").permitAll()
                 .anyRequest().authenticated();
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
