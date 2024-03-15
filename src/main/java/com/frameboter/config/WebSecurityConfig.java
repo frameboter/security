@@ -37,7 +37,7 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    private void configureOpenApiSecurity(HttpSecurity http){
+    private void configureOpenApiSecurity(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests()
                 .requestMatchers(swaggerPath).permitAll()
