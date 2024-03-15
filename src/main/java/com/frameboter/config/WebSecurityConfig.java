@@ -1,4 +1,6 @@
 package com.frameboter.config;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -14,11 +16,21 @@ public class WebSecurityConfig {
 
     private final JwtAuthConverter jwtAuthConverter = new JwtAuthConverter();
 
+    @Value("${springdoc.swagger-ui.path:/swagger}")
+    private String swaggerPath;
+
+    @Value("${springdoc.api-docs.path:/api-docs}")
+    private String openApiPath;
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.cors().and().csrf().disable();
-        http.authorizeHttpRequests().anyRequest().authenticated();
+        http.authorizeHttpRequests()
+                .requestMatchers(swaggerPath).permitAll()
+                .requestMatchers(openApiPath).permitAll()
+                .anyRequest().authenticated();
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
