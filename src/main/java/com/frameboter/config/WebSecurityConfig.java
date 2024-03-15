@@ -30,13 +30,21 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.cors().and().csrf().disable();
-        http.authorizeHttpRequests()
-                .requestMatchers(swaggerPath).permitAll()
-                .requestMatchers( swaggerPath +"-ui").permitAll()
-                .requestMatchers(openApiPath).permitAll()
-                .anyRequest().authenticated();
+        configureOpenApiSecurity(http);
+        http.authorizeHttpRequests().anyRequest().authenticated();
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
+    }
+
+    private void configureOpenApiSecurity(HttpSecurity http){
+
+        http.authorizeHttpRequests()
+                .requestMatchers(swaggerPath).permitAll()
+                .requestMatchers(swaggerPath + "/*").permitAll()
+                .requestMatchers( swaggerPath +"-ui").permitAll()
+                .requestMatchers( swaggerPath +"-ui/*").permitAll()
+                .requestMatchers(openApiPath).permitAll()
+                .requestMatchers(openApiPath + "/*").permitAll();
     }
 }
