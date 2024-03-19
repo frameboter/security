@@ -25,8 +25,8 @@ public class WebSecurityConfig {
     @Value("${server.servlet.context-path:}")
     private String pathPrefix;
 
-	@Value("${security.public.paths:}")
-	private String[] publicPaths;
+    @Value("${security.public.paths:}")
+    private String[] publicPaths;
 
 
     @Bean
@@ -50,10 +50,10 @@ public class WebSecurityConfig {
                 .requestMatchers(openApiPath).permitAll()
                 .requestMatchers(openApiPath + "/*").permitAll();
         
-        		for (String publicPath : publicPaths) {
-			http.authorizeHttpRequests()
-				.requestMatchers(publicPath).permitAll()
-				.requestMatchers(publicPath + "/*").permitAll();
-		}
+        for (String publicPath : publicPaths) {
+                http.authorizeHttpRequests()
+                .requestMatchers(publicPath).permitAll()
+                .requestMatchers(publicPath + "/*").permitAll();
+	}
     }
 }
