@@ -27,8 +27,8 @@ public class WebSecurityConfig {
     @Value("${server.servlet.context-path:}")
     private String pathPrefix;
 
-	@Value("#{'${security.public.paths}'.split(',')}")
-	private List<String> publicPaths;
+	@Value("${security.public.paths}")
+	private String[] publicPaths;
 
 
     @Bean
