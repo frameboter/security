@@ -45,15 +45,15 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests()
                 .requestMatchers(swaggerPath).permitAll()
                 .requestMatchers(swaggerPath + "/*").permitAll()
-                .requestMatchers( swaggerPath +"-ui").permitAll()
-                .requestMatchers( swaggerPath +"-ui/*").permitAll()
+                .requestMatchers(swaggerPath +"-ui").permitAll()
+                .requestMatchers(swaggerPath +"-ui/*").permitAll()
                 .requestMatchers(openApiPath).permitAll()
                 .requestMatchers(openApiPath + "/*").permitAll();
         
         		for (String publicPath : publicPaths) {
 			http.authorizeHttpRequests()
 				.requestMatchers(publicPath).permitAll()
-				.requestMatchers(publicPath + "/*").permitAll()
+				.requestMatchers(publicPath + "/*").permitAll();
 		}
     }
 }
