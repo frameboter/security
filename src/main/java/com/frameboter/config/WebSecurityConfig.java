@@ -25,7 +25,7 @@ public class WebSecurityConfig {
     @Value("${server.servlet.context-path:}")
     private String pathPrefix;
 
-	@Value("${security.public.paths}")
+	@Value("${security.public.paths:}")
 	private String[] publicPaths;
 
 
