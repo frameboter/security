@@ -25,6 +25,9 @@ public class WebSecurityConfig {
     @Value("${server.servlet.context-path:}")
     private String pathPrefix;
 
+	@Value("#{'${security.public.paths}'.split(',')}")
+	private List<String> publicPaths;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -46,5 +49,11 @@ public class WebSecurityConfig {
                 .requestMatchers( swaggerPath +"-ui/*").permitAll()
                 .requestMatchers(openApiPath).permitAll()
                 .requestMatchers(openApiPath + "/*").permitAll();
+        
+        		for (String publicPath : publicPaths) {
+			http.authorizeHttpRequests()
+				.requestMatchers(publicPath).permitAll()
+				.requestMatchers(publicPath + "/*").permitAll()
+		}
     }
 }
