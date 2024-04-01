@@ -1,1 +1,2 @@
 com.frameboter.config.WebSecurityConfig
+com.frameboter.config.HttpServiceConfig
