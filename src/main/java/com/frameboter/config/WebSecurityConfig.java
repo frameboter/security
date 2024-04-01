@@ -47,7 +47,14 @@ public class WebSecurityConfig {
                 .requestMatchers(swaggerPath +"-ui").permitAll()
                 .requestMatchers(swaggerPath +"-ui/*").permitAll()
                 .requestMatchers(openApiPath).permitAll()
-                .requestMatchers(openApiPath + "/*").permitAll();
+                .requestMatchers(openApiPath + "/*").permitAll()
+
+                .requestMatchers(pathPrefix + "/" + swaggerPath).permitAll()
+                .requestMatchers(pathPrefix + "/" + swaggerPath + "/*").permitAll()
+                .requestMatchers(pathPrefix + "/" + swaggerPath +"-ui").permitAll()
+                .requestMatchers(pathPrefix + "/" + swaggerPath +"-ui/*").permitAll()
+                .requestMatchers(pathPrefix + "/" + openApiPath).permitAll()
+                .requestMatchers(pathPrefix + "/" + openApiPath + "/*").permitAll();
         
         for (String publicPath : publicPaths) {
                 http.authorizeHttpRequests()
