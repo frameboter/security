@@ -67,12 +67,12 @@
                 <repository>
                     <id>github-deploy</id>
                     <name>GitHub frameboter Apache Maven Packages</name>
-                    <url>https://maven.pkg.github.com/frameboter/database</url>
+                    <url>https://maven.pkg.github.com/frameboter/security</url>
                 </repository>
                 <snapshotRepository>
                     <id>github-deploy</id>
                     <name>GitHub frameboter Apache Maven Snapshots</name>
-                    <url>https://maven.pkg.github.com/frameboter/database</url>
+                    <url>https://maven.pkg.github.com/frameboter/security</url>
                 </snapshotRepository>
             </distributionManagement>
         </profile>
