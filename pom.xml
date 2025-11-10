@@ -44,11 +44,38 @@
         <finalName>security</finalName>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub frameboter Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/frameboter/security</url>
-        </repository>
-    </distributionManagement>
+ <profiles>
+        <profile>
+            <id>gitea-deploy</id>
+            <distributionManagement>
+                <repository>
+                    <id>gitea-deploy</id>
+                    <name>Gitea frameboter Maven Packages</name>
+                    <url>https://gitea.roboter5123.com/api/packages/frameboter/maven</url>
+                </repository>
+                <snapshotRepository>
+                    <id>gitea-deploy</id>
+                    <name>Gitea frameboter Maven Snapshots</name>
+                    <url>https://gitea.roboter5123.com/api/packages/frameboter/maven</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>github-deploy</id>
+            <distributionManagement>
+                <repository>
+                    <id>github-deploy</id>
+                    <name>GitHub frameboter Apache Maven Packages</name>
+                    <url>https://maven.pkg.github.com/frameboter/database</url>
+                </repository>
+                <snapshotRepository>
+                    <id>github-deploy</id>
+                    <name>GitHub frameboter Apache Maven Snapshots</name>
+                    <url>https://maven.pkg.github.com/frameboter/database</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+
+    </profiles>
 </project>
