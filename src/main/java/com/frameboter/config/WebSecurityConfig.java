@@ -1,4 +1,4 @@
-package com.protocolofdivinity.httpclientuiservice.config;
+package com.frameboter.httpclientuiservice.config;
 
 import com.frameboter.config.JwtAuthConverter;
 import org.slf4j.Logger;
