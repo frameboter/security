@@ -1,4 +1,4 @@
-package com.frameboter.httpclientuiservice.config;
+package com.frameboter.config;
 
 import com.frameboter.config.JwtAuthConverter;
 import org.slf4j.Logger;
