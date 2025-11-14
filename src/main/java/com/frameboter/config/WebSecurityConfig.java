@@ -23,43 +23,46 @@ public class WebSecurityConfig {
     private String openApiPath;
 
     @Value("${server.servlet.context-path:}")
-    private String pathPrefix;
+    private String contextPath;
 
     @Value("${security.public.paths:}")
     private String[] publicPaths;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        configureOpenApiSecurity(http);
-        http.authorizeHttpRequests().anyRequest().authenticated();
-        http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.authorizeHttpRequests(auth -> {
+
+            // swagger + openapi
+            auth.requestMatchers(swaggerPath, swaggerPath + "/*", swaggerPath + "-ui", swaggerPath + "-ui/*").permitAll();
+            auth.requestMatchers(openApiPath, openApiPath + "/*").permitAll();
+
+            // same but with context path
+            auth.requestMatchers(contextPath + swaggerPath).permitAll();
+            auth.requestMatchers(contextPath + swaggerPath + "/*").permitAll();
+            auth.requestMatchers(contextPath + swaggerPath + "-ui").permitAll();
+            auth.requestMatchers(contextPath + swaggerPath + "-ui/*").permitAll();
+            auth.requestMatchers(contextPath + openApiPath).permitAll();
+            auth.requestMatchers(contextPath + openApiPath + "/*").permitAll();
+
+            // Public paths (fixed)
+            for (String p : publicPaths) {
+                auth.requestMatchers(p).permitAll();
+                auth.requestMatchers(p + "/**").permitAll();
+
+                // automatically prepend context path
+                auth.requestMatchers(contextPath + p).permitAll();
+                auth.requestMatchers(contextPath + p + "/**").permitAll();
+            }
+
+            auth.anyRequest().authenticated();
+        });
+
+        http.oauth2ResourceServer(oauth -> oauth.jwt().jwtAuthenticationConverter(jwtAuthConverter));
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         return http.build();
     }
-
-    private void configureOpenApiSecurity(HttpSecurity http) throws Exception {
-
-        http.authorizeHttpRequests()
-                .requestMatchers(swaggerPath).permitAll()
-                .requestMatchers(swaggerPath + "/*").permitAll()
-                .requestMatchers(swaggerPath +"-ui").permitAll()
-                .requestMatchers(swaggerPath +"-ui/*").permitAll()
-                .requestMatchers(openApiPath).permitAll()
-                .requestMatchers(openApiPath + "/*").permitAll()
-
-                .requestMatchers(pathPrefix + "/" + swaggerPath).permitAll()
-                .requestMatchers(pathPrefix + "/" + swaggerPath + "/*").permitAll()
-                .requestMatchers(pathPrefix + "/" + swaggerPath +"-ui").permitAll()
-                .requestMatchers(pathPrefix + "/" + swaggerPath +"-ui/*").permitAll()
-                .requestMatchers(pathPrefix + "/" + openApiPath).permitAll()
-                .requestMatchers(pathPrefix + "/" + openApiPath + "/*").permitAll();
-        
-        for (String publicPath : publicPaths) {
-                http.authorizeHttpRequests()
-                .requestMatchers(publicPath).permitAll()
-                .requestMatchers(publicPath + "/*").permitAll();
-	}
-    }
 }
+
+
