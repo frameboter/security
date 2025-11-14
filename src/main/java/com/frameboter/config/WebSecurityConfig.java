@@ -37,7 +37,8 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+        log.info("disabling csrf");
+        http.csrf(csrf -> csrf.disable());
         log.info("swaggerPath: {}", swaggerPath);
         log.info("openApiPath: {}", openApiPath);
         log.info("contextPath: {}", contextPath);
